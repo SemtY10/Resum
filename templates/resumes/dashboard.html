@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Мої резюме - Resume Builder{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>📊 Мої резюме</h1>
+    <a href="{% url 'create_resume' %}" class="btn btn-success">➕ Створити нове резюме</a>
+</div>
+
+{% if resumes %}
+    <div class="row">
+        {% for resume in resumes %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ resume.title }}</h5>
+                    <p class="card-text">
+                        <small class="text-muted">
+                            Створено: {{ resume.created_at|date:"d.m.Y" }}<br>
+                            Оновлено: {{ resume.updated_at|date:"d.m.Y" }}
+                        </small>
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <div class="btn-group w-100">
+                        <a href="#" class="btn btn-outline-primary btn-sm">👀 Переглянути</a>
+                        <a href="#" class="btn btn-outline-secondary btn-sm">✏️ Редагувати</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="text-center py-5">
+        <h3>У вас ще немає резюме</h3>
+        <p class="text-muted">Створіть своє перше резюме прямо зараз!</p>
+        <a href="{% url 'create_resume' %}" class="btn btn-primary btn-lg">🚀 Створити перше резюме</a>
+    </div>
+{% endif %}
+{% endblock %}

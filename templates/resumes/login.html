@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Увійти - Resume Builder{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="mb-0">🔐 Увійти в систему</h2>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Ім'я користувача</label>
+                        <input type="text" name="username" class="form-control" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Пароль</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Увійти</button>
+                </form>
+                
+                <div class="mt-3 text-center">
+                    <p class="text-muted">Або увійдіть через адмін-панель:</p>
+                    <a href="{% url 'admin:index' %}" class="btn btn-outline-secondary">⚙️ Адмінка</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
