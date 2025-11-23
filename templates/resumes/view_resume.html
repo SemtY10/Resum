@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ resume.title }} - Resume Builder{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>{{ resume.title }}</h1>
+        <a href="{% url 'dashboard' %}" class="btn btn-secondary">↩️ Назад</a>
+    </div>
+
+    {% if personal_info %}
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">👤 Персональна інформація</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Повне ім'я:</strong> {{ personal_info.full_name }}</p>
+                    <p><strong>Посада:</strong> {{ personal_info.job_title }}</p>
+                    <p><strong>Email:</strong> {{ personal_info.email }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Телефон:</strong> {{ personal_info.phone }}</p>
+                    <p><strong>Адреса:</strong> {{ personal_info.address }}</p>
+                </div>
+            </div>
+            {% if personal_info.summary %}
+            <div class="mt-3">
+                <strong>Про себе:</strong>
+                <p class="mt-2">{{ personal_info.summary }}</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if education %}
+    <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+            <h3 class="mb-0">🎓 Освіта</h3>
+        </div>
+        <div class="card-body">
+            {% for edu in education %}
+            <div class="mb-3 {% if not forloop.last %}border-bottom pb-3{% endif %}">
+                <h5>{{ edu.institution }}</h5>
+                <p class="mb-1"><strong>Ступінь:</strong> {{ edu.degree }} ({{ edu.get_degree_type_display }})</p>
+                <p class="mb-1"><strong>Спеціальність:</strong> {{ edu.field_of_study }}</p>
+                <p class="mb-1"><strong>Період:</strong> {{ edu.start_date|date:"Y" }} - {% if edu.currently_studying %}Зараз{% else %}{{ edu.end_date|date:"Y" }}{% endif %}</p>
+                {% if edu.description %}
+                <p class="mt-2">{{ edu.description }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if experiences %}
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+            <h3 class="mb-0">💼 Досвід роботи</h3>
+        </div>
+        <div class="card-body">
+            {% for exp in experiences %}
+            <div class="mb-3 {% if not forloop.last %}border-bottom pb-3{% endif %}">
+                <h5>{{ exp.company }}</h5>
+                <p class="mb-1"><strong>Посада:</strong> {{ exp.position }}</p>
+                <p class="mb-1"><strong>Період:</strong> {{ exp.start_date|date:"Y" }} - {% if exp.currently_working %}Зараз{% else %}{{ exp.end_date|date:"Y" }}{% endif %}</p>
+                {% if exp.description %}
+                <p class="mt-2">{{ exp.description }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if skills %}
+    <div class="card mb-4">
+        <div class="card-header bg-warning text-dark">
+            <h3 class="mb-0">⚡ Навички</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                {% for skill in skills %}
+                <div class="col-md-6 mb-2">
+                    <span class="badge bg-secondary">{{ skill.name }}</span>
+                    <small class="text-muted">({{ skill.get_level_display }})</small>
+                    {% if skill.category %}
+                    <small class="text-muted">- {{ skill.category }}</small>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

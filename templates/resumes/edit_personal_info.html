@@ -1,0 +1,89 @@
+<!-- templates/resumes/edit_personal_info.html -->
+{% extends 'base.html' %}
+
+{% block title %}Персональна інформація - Resume Builder{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h2 class="mb-0">👤 Персональна інформація</h2>
+                <small>Резюме: {{ resume.title }}</small>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <!-- Повне ім'я -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Повне ім'я *</label>
+                        {{ form.full_name }}
+                        {% if form.full_name.errors %}
+                            <div class="text-danger small">{{ form.full_name.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Посада -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Посада *</label>
+                        {{ form.job_title }}
+                        {% if form.job_title.errors %}
+                            <div class="text-danger small">{{ form.job_title.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">Наприклад: "Python Developer", "Marketing Manager"</div>
+                    </div>
+                    
+                    <!-- Контактна інформація -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Email *</label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                    <div class="text-danger small">{{ form.email.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Телефон *</label>
+                                {{ form.phone }}
+                                {% if form.phone.errors %}
+                                    <div class="text-danger small">{{ form.phone.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Адреса -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Адреса</label>
+                        {{ form.address }}
+                        {% if form.address.errors %}
+                            <div class="text-danger small">{{ form.address.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">Місто, країна</div>
+                    </div>
+                    
+                    <!-- Про себе -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Про себе *</label>
+                        {{ form.summary }}
+                        {% if form.summary.errors %}
+                            <div class="text-danger small">{{ form.summary.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">Розкажіть коротко про себе, ваші цілі та досягнення (3-5 речень)</div>
+                    </div>
+
+                    <!-- Кнопки -->
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'dashboard' %}" class="btn btn-secondary me-md-2">↩️ Назад</a>
+                        <button type="submit" class="btn btn-success">💾 Зберегти інформацію</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -3,40 +3,131 @@
 {% block title %}Мої резюме - Resume Builder{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1>📊 Мої резюме</h1>
-    <a href="{% url 'create_resume' %}" class="btn btn-success">➕ Створити нове резюме</a>
-</div>
+<div class="container">
+    <!-- Заголовок та пошук -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="display-5 fw-bold text-primary">📊 Мої резюме</h1>
+            <p class="text-muted">Керуйте своїми резюме в одному місці</p>
+        </div>
+        <div class="col-md-4">
+            <div class="d-flex gap-2">
+                <form method="get" class="flex-grow-1">
+                    <div class="input-group">
+                        <input type="text" name="search" value="{{ search_query }}" 
+                               class="form-control" placeholder="Пошук резюме...">
+                        <button type="submit" class="btn btn-outline-primary">🔍</button>
+                    </div>
+                </form>
+                <a href="{% url 'create_resume' %}" class="btn btn-success">
+                    <i class="fas fa-plus"></i> Нове
+                </a>
+            </div>
+        </div>
+    </div>
 
-{% if resumes %}
+    {% if resumes %}
+    <!-- Сітка резюме -->
     <div class="row">
         {% for resume in resumes %}
-        <div class="col-md-6 col-lg-4 mb-4">
-            <div class="card h-100">
+        <div class="col-xl-4 col-lg-6 col-md-6 mb-4">
+            <div class="card h-100 shadow-sm border-0 resume-card">
                 <div class="card-body">
-                    <h5 class="card-title">{{ resume.title }}</h5>
-                    <p class="card-text">
+                    <!-- Заголовок резюме -->
+                    <h5 class="card-title text-dark mb-3">
+                        📝 {{ resume.title }}
+                    </h5>
+                    
+                    <!-- Дати -->
+                    <div class="mb-3">
                         <small class="text-muted">
-                            Створено: {{ resume.created_at|date:"d.m.Y" }}<br>
-                            Оновлено: {{ resume.updated_at|date:"d.m.Y" }}
+                            <i class="fas fa-calendar-plus"></i> Створено: {{ resume.created_at|date:"d.m.Y" }}<br>
+                            <i class="fas fa-calendar-check"></i> Оновлено: {{ resume.updated_at|date:"d.m.Y" }}
                         </small>
-                    </p>
+                    </div>
+
+                    <!-- Прогрес заповнення -->
+                    <div class="progress mb-3" style="height: 8px;">
+                        {% widthratio resume.personal_info|yesno:"1,0" 1 25 as personal_width %}
+                        {% widthratio resume.education.count 1 25 as education_width %}
+                        {% widthratio resume.experiences.count 1 25 as experience_width %}
+                        {% widthratio resume.skills.count 1 25 as skills_width %}
+                        <div class="progress-bar bg-success" style="width: {{ personal_width }}%"></div>
+                        <div class="progress-bar bg-info" style="width: {{ education_width }}%"></div>
+                        <div class="progress-bar bg-warning" style="width: {{ experience_width }}%"></div>
+                        <div class="progress-bar bg-danger" style="width: {{ skills_width }}%"></div>
+                    </div>
+
+                    <!-- Статус заповнення -->
+                    <div class="row text-center small mb-3">
+                        <div class="col-3">
+                            <div class="{% if resume.personal_info %}text-success{% else %}text-muted{% endif %}">
+                                👤<br>
+                                <small>Персона</small>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="{% if resume.education.count %}text-info{% else %}text-muted{% endif %}">
+                                🎓<br>
+                                <small>Освіта</small>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="{% if resume.experiences.count %}text-warning{% else %}text-muted{% endif %}">
+                                💼<br>
+                                <small>Досвід</small>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="{% if resume.skills.count %}text-danger{% else %}text-muted{% endif %}">
+                                ⚡<br>
+                                <small>Навички</small>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-footer">
+
+                <!-- Кнопки дій -->
+                <div class="card-footer bg-transparent border-top-0">
+                    <!-- Основні дії -->
+                    <div class="btn-group w-100 mb-2">
+                        <a href="{% url 'view_resume' resume.id %}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-eye"></i> Перегляд
+                        </a>
+                        <a href="{% url 'edit_personal_info' resume.id %}" class="btn btn-outline-primary btn-sm">
+                            {% if resume.personal_info %}✏️{% else %}➕{% endif %}
+                        </a>
+                    </div>
+                    
+                    <!-- Додаткові розділи -->
                     <div class="btn-group w-100">
-                        <a href="#" class="btn btn-outline-primary btn-sm">👀 Переглянути</a>
-                        <a href="#" class="btn btn-outline-secondary btn-sm">✏️ Редагувати</a>
+                        <a href="{% url 'add_education' resume.id %}" class="btn btn-outline-success btn-sm">
+                            🎓 {{ resume.education.count }}
+                        </a>
+                        <a href="{% url 'add_experience' resume.id %}" class="btn btn-outline-info btn-sm">
+                            💼 {{ resume.experiences.count }}
+                        </a>
+                        <a href="{% url 'add_skill' resume.id %}" class="btn btn-outline-warning btn-sm">
+                            ⚡ {{ resume.skills.count }}
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
-{% else %}
+    {% else %}
+    <!-- Якщо немає резюме -->
     <div class="text-center py-5">
-        <h3>У вас ще немає резюме</h3>
-        <p class="text-muted">Створіть своє перше резюме прямо зараз!</p>
-        <a href="{% url 'create_resume' %}" class="btn btn-primary btn-lg">🚀 Створити перше резюме</a>
+        <div class="empty-state">
+            <i class="fas fa-file-alt fa-4x text-muted mb-3"></i>
+            <h3 class="text-muted">У вас ще немає резюме</h3>
+            <p class="text-muted mb-4">Створіть своє перше професійне резюме</p>
+            <a href="{% url 'create_resume' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-plus"></i> Створити перше резюме
+            </a>
+        </div>
     </div>
-{% endif %}
+    {% endif %}
+</div>
 {% endblock %}
