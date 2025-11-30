@@ -46,7 +46,12 @@
                         </small>
                     </div>
 
-                    <!-- Прогрес заповнення -->
+                    <div class="mb-2">
+                        <small class="text-info">
+                            <i class="fas fa-palette"></i> Шаблон: {{ resume.template.name }}
+                        </small>
+                    </div>
+
                     <div class="progress mb-3" style="height: 8px;">
                         {% widthratio resume.personal_info|yesno:"1,0" 1 25 as personal_width %}
                         {% widthratio resume.education.count 1 25 as education_width %}
@@ -58,7 +63,21 @@
                         <div class="progress-bar bg-danger" style="width: {{ skills_width }}%"></div>
                     </div>
 
-                    <!-- Статус заповнення -->
+                    {% if resume.education.count %}
+                    <div class="mt-2">
+                        <small><strong>Освіта:</strong></small>
+                        {% for edu in resume.education.all %}
+                        <div class="d-flex justify-content-between align-items-center small py-1">
+                            <span>{{ edu.institution }} - {{ edu.degree }}</span>
+                            <div>
+                                <a href="{% url 'edit_education' edu.id %}" class="btn btn-sm btn-outline-warning">✏️</a>
+                                <a href="{% url 'delete_education' edu.id %}" class="btn btn-sm btn-outline-danger">🗑️</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
                     <div class="row text-center small mb-3">
                         <div class="col-3">
                             <div class="{% if resume.personal_info %}text-success{% else %}text-muted{% endif %}">
@@ -87,9 +106,12 @@
                     </div>
                 </div>
 
-                <!-- Кнопки дій -->
+                <div class="btn-group w-100 mb-2">
+                    <a href="{% url 'view_resume' resume.id %}" class="btn btn-primary btn-sm">👀 Перегляд</a>
+                    <a href="{% url 'export_pdf' resume.id %}" class="btn btn-danger btn-sm">📄 PDF</a>  <!-- ДОДАЄМО -->
+                </div>
+
                 <div class="card-footer bg-transparent border-top-0">
-                    <!-- Основні дії -->
                     <div class="btn-group w-100 mb-2">
                         <a href="{% url 'view_resume' resume.id %}" class="btn btn-primary btn-sm">
                             <i class="fas fa-eye"></i> Перегляд
@@ -99,7 +121,6 @@
                         </a>
                     </div>
                     
-                    <!-- Додаткові розділи -->
                     <div class="btn-group w-100">
                         <a href="{% url 'add_education' resume.id %}" class="btn btn-outline-success btn-sm">
                             🎓 {{ resume.education.count }}
@@ -117,7 +138,6 @@
         {% endfor %}
     </div>
     {% else %}
-    <!-- Якщо немає резюме -->
     <div class="text-center py-5">
         <div class="empty-state">
             <i class="fas fa-file-alt fa-4x text-muted mb-3"></i>

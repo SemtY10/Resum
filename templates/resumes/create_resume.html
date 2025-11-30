@@ -4,9 +4,9 @@
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-md-6">
+    <div class="col-md-8">
         <div class="card">
-            <div class="card-header">
+            <div class="card-header bg-success text-white">
                 <h2 class="mb-0">📝 Створення нового резюме</h2>
             </div>
             <div class="card-body">
@@ -14,25 +14,50 @@
                     {% csrf_token %}
                     
                     <div class="mb-3">
-                        <label for="{{ form.title.id_for_label }}" class="form-label">
-                            Назва резюме *
-                        </label>
+                        <label class="form-label fw-bold">Назва резюме *</label>
                         {{ form.title }}
                         {% if form.title.errors %}
-                            <div class="text-danger">
-                                {{ form.title.errors }}
-                            </div>
+                            <div class="text-danger small">{{ form.title.errors }}</div>
                         {% endif %}
                         <div class="form-text">
                             Наприклад: "Резюме Python розробника" або "Моє резюме маркетолога"
                         </div>
                     </div>
 
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Шаблон резюме</label>
+                        {{ form.template }}
+                        {% if form.template.errors %}
+                            <div class="text-danger small">{{ form.template.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">
+                            Оберіть шаблон для вашого резюме або залиште стандартний
+                        </div>
+                    </div>
+
                     <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary">💾 Створити резюме</button>
+                        <button type="submit" class="btn btn-success btn-lg">
+                            🚀 Створити резюме
+                        </button>
+                        <a href="{% url 'template_catalog' %}" class="btn btn-outline-primary">
+                            🎨 Переглянути всі шаблони
+                        </a>
                         <a href="{% url 'dashboard' %}" class="btn btn-secondary">↩️ Скасувати</a>
                     </div>
                 </form>
+            </div>
+        </div>
+
+        <!-- Простий блок з посиланням на каталог -->
+        <div class="card mt-4">
+            <div class="card-header bg-info text-white">
+                <h4 class="mb-0">💡 Порада</h4>
+            </div>
+            <div class="card-body">
+                <p>Оберіть шаблон, який найкраще підходить для вашої професії та цілей!</p>
+                <a href="{% url 'template_catalog' %}" class="btn btn-outline-info">
+                    👀 Переглянути повний каталог шаблонів
+                </a>
             </div>
         </div>
     </div>

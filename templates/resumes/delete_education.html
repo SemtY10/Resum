@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Видалення освіти - Resume Builder{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h2 class="mb-0">🗑️ Видалення освіти</h2>
+            </div>
+            <div class="card-body text-center">
+                <div class="mb-4">
+                    <i class="fas fa-exclamation-triangle fa-3x text-danger"></i>
+                </div>
+                
+                <h4>Ви впевнені, що хочете видалити цю освіту?</h4>
+                <p class="text-muted">{{ education.institution }} - {{ education.degree }}</p>
+                <p class="text-warning">Цю дію не можна скасувати!</p>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-danger">🗑️ Так, видалити</button>
+                        <a href="{% url 'dashboard' %}" class="btn btn-secondary">❌ Скасувати</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

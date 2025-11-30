@@ -41,3 +41,10 @@
 .bg-primary {
     background-color: #2c5aa0 !important;
 }
+
+.resume-section {
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    background: #f8f9fa;
+    border-radius: 5px;
+}

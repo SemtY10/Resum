@@ -1,5 +1,5 @@
 from django import forms
-from .models import Resume, PersonalInfo, Education, Experience, Skill
+from .models import Resume, PersonalInfo, Education, Experience, Skill, ResumeTemplate
 
 class ResumeForm(forms.ModelForm):
     class Meta:
@@ -13,6 +13,25 @@ class ResumeForm(forms.ModelForm):
         }
         labels = {
             'title': 'Назва резюме'
+        }
+        
+class ResumeFormWithTemplate(forms.ModelForm):
+    template = forms.ModelChoiceField(
+        queryset=ResumeTemplate.objects.filter(is_active=True),
+        required=False,
+        empty_label="Без шаблону (стандартний)",
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        label="Шаблон резюме"
+    )
+
+    class Meta:
+        model = Resume
+        fields = ['title', 'template']
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Наприклад: Резюме Python розробника'
+            })
         }
 
 class PersonalInfoForm(forms.ModelForm):

@@ -1,10 +1,16 @@
 from django.contrib import admin
-from .models import Resume, PersonalInfo, Education, Experience, Skill
+from .models import Resume, PersonalInfo, Education, Experience, Skill, ResumeTemplate
+
+@admin.register(ResumeTemplate)
+class ResumeTemplateAdmin(admin.ModelAdmin):
+    list_display = ['name', 'template_type', 'is_active', 'is_premium', 'price']
+    list_filter = ['template_type', 'is_active', 'is_premium']
+    search_fields = ['name', 'description']
 
 @admin.register(Resume)
 class ResumeAdmin(admin.ModelAdmin):
-    list_display = ['title', 'user', 'created_at']  # ← ВИЛУЧИЛИ is_public
-    list_filter = ['created_at']  # ← ВИЛУЧИЛИ is_public
+    list_display = ['title', 'user', 'created_at']
+    list_filter = ['created_at']
     search_fields = ['title', 'user__username']
     date_hierarchy = 'created_at'
 

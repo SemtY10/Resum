@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}Перегляд шаблону - {{ template.name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="display-5 fw-bold">{{ template.name }}</h1>
+            <p class="lead">{{ template.description }}</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <a href="{% url 'template_catalog' %}" class="btn btn-secondary">← Назад до каталогу</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">👀 Попередній перегляд</h4>
+                </div>
+                <div class="card-body">
+                    <!-- Прев'ю шаблону -->
+                    <div id="template-preview" style="border: 1px solid #ddd; padding: 20px; min-height: 400px;">
+                        <style>{{ template.css_styles }}</style>
+                        {{ template.html_template|safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">⚡ Інформація про шаблон</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <strong>Тип:</strong> 
+                            <span class="badge bg-primary">{{ template.get_template_type_display }}</span>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Статус:</strong> 
+                            {% if template.is_premium %}
+                            <span class="badge bg-warning">Преміум</span>
+                            {% else %}
+                            <span class="badge bg-success">Безкоштовний</span>
+                            {% endif %}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Ціна:</strong> 
+                            {% if template.is_premium %}
+                            <span class="text-warning fw-bold">{{ template.price }} ₴</span>
+                            {% else %}
+                            <span class="text-success fw-bold">Безкоштовно</span>
+                            {% endif %}
+                        </li>
+                    </ul>
+                    
+                    <div class="mt-3">
+                        {% if template.is_premium %}
+                        <button class="btn btn-warning w-100" disabled>
+                            🔒 Преміум шаблон
+                        </button>
+                        <small class="text-muted">Для використання необхідна преміум підписка</small>
+                        {% else %}
+                        <a href="{% url 'create_resume' %}?template={{ template.id }}" class="btn btn-success w-100">
+                            ✅ Обрати цей шаблон
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
