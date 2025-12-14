@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Видалення резюме - Resume Builder{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h2 class="mb-0">🗑️ Видалення резюме</h2>
+            </div>
+            <div class="card-body text-center">
+                <div class="mb-4">
+                    <i class="fas fa-exclamation-triangle fa-3x text-danger"></i>
+                </div>
+                
+                <h4>Ви впевнені, що хочете видалити це резюме?</h4>
+                <div class="alert alert-warning">
+                    <h5>{{ resume.title }}</h5>
+                    <p class="mb-1"><small>Створено: {{ resume.created_at|date:"d.m.Y" }}</small></p>
+                    <p class="mb-1"><small>Оновлено: {{ resume.updated_at|date:"d.m.Y" }}</small></p>
+                </div>
+                
+                <div class="text-start mb-3">
+                    <p><strong>Увага! Буде видалено:</strong></p>
+                    <ul>
+                        <li>Персональну інформацію</li>
+                        <li>Освіту ({{ resume.education.count }} записів)</li>
+                        <li>Досвід роботи ({{ resume.experiences.count }} записів)</li>
+                        <li>Навички ({{ resume.skills.count }} записів)</li>
+                    </ul>
+                    <p class="text-danger"><strong>Цю дію не можна скасувати!</strong></p>
+                </div>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-danger btn-lg">
+                            <i class="fas fa-trash"></i> Так, видалити резюме
+                        </button>
+                        <a href="{% url 'dashboard' %}" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Скасувати
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

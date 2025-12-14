@@ -21,4 +21,6 @@ urlpatterns = [
     path('experience/<int:experience_id>/delete/', views.delete_experience, name='delete_experience'),
     path('skill/<int:skill_id>/edit/', views.edit_skill, name='edit_skill'),
     path('skill/<int:skill_id>/delete/', views.delete_skill, name='delete_skill'),
+    path('resume/<int:resume_id>/clone/', views.clone_resume, name='clone_resume'),
+    path('resume/<int:resume_id>/delete/', views.delete_resume, name='delete_resume'),
 ]

@@ -50,6 +50,13 @@ class PersonalInfo(models.Model):
     phone = models.CharField(max_length = 20,  verbose_name="Номер телефону")
     address = models.TextField(verbose_name="Адреса")
     summary = models.TextField(verbose_name="Про себе")
+    photo = models.ImageField(
+    upload_to='resume_photos/',
+    blank=True,
+    null=True,
+    verbose_name="Фотографія",
+    help_text="Завантажте ваше фото для резюме"
+)
 
     def __str__(self):
             return self.full_name

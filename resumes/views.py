@@ -169,7 +169,7 @@ def edit_personal_info(request, resume_id):
         personal_info = None
     
     if request.method == 'POST':
-        form = PersonalInfoForm(request.POST, instance=personal_info)
+        form = PersonalInfoForm(request.POST, request.FILES, instance=personal_info)
         if form.is_valid():
             personal_info = form.save(commit=False)
             personal_info.resume = resume
@@ -388,3 +388,99 @@ def template_catalog(request):
 def template_preview(request, template_id):
     template = get_object_or_404(ResumeTemplate, id=template_id, is_active=True)
     return render(request, 'resumes/template_preview.html', {'template': template})
+
+def home(request):
+    try:
+        from news.models import News
+        latest_news = News.objects.filter(is_active=True).order_by('-created_at')[:2]
+    except:
+        latest_news = []
+    
+    return render(request, 'resumes/home.html', {'latest_news': latest_news})
+
+@login_required
+def clone_resume(request, resume_id):
+    original = get_object_or_404(Resume, id=resume_id, user=request.user)
+    cloned = Resume.objects.create(
+        user=request.user,
+        title=f"Копія {original.title}",
+        template=original.template
+    )
+    return redirect('edit_personal_info', resume_id=cloned.id)
+
+@login_required
+def clone_resume(request, resume_id):
+    original = get_object_or_404(Resume, id=resume_id, user=request.user)
+    
+    # Створюємо копію резюме
+    cloned_resume = Resume.objects.create(
+        user=request.user,
+        title=f"Копія {original.title}",
+        template=original.template
+    )
+    
+    # Копіюємо персональну інформацію (якщо є)
+    try:
+        original_personal = PersonalInfo.objects.get(resume=original)
+        PersonalInfo.objects.create(
+            resume=cloned_resume,
+            full_name=original_personal.full_name,
+            job_title=original_personal.job_title,
+            email=original_personal.email,
+            phone=original_personal.phone,
+            address=original_personal.address,
+            summary=original_personal.summary,
+            photo=original_personal.photo  # Копіюємо фото
+        )
+    except PersonalInfo.DoesNotExist:
+        pass
+    
+    # Копіюємо освіту
+    for edu in original.education.all():
+        Education.objects.create(
+            resume=cloned_resume,
+            institution=edu.institution,
+            degree=edu.degree,
+            degree_type=edu.degree_type,
+            field_of_study=edu.field_of_study,
+            start_date=edu.start_date,
+            end_date=edu.end_date,
+            currently_studying=edu.currently_studying,
+            description=edu.description
+        )
+    
+    # Копіюємо досвід роботи
+    for exp in original.experiences.all():
+        Experience.objects.create(
+            resume=cloned_resume,
+            company=exp.company,
+            position=exp.position,
+            start_date=exp.start_date,
+            end_date=exp.end_date,
+            currently_working=exp.currently_working,
+            description=exp.description
+        )
+    
+    # Копіюємо навички
+    for skill in original.skills.all():
+        Skill.objects.create(
+            resume=cloned_resume,
+            name=skill.name,
+            level=skill.level,
+            category=skill.category
+        )
+    
+    messages.success(request, f'Резюме "{original.title}" успішно клоновано!')
+    return redirect('dashboard')
+
+@login_required
+def delete_resume(request, resume_id):
+    resume = get_object_or_404(Resume, id=resume_id, user=request.user)
+    
+    if request.method == 'POST':
+        title = resume.title
+        resume.delete()
+        messages.success(request, f'Резюме "{title}" видалено!')
+        return redirect('dashboard')
+    
+    return render(request, 'resumes/delete_resume.html', {'resume': resume})

@@ -12,7 +12,7 @@
                 <small>Резюме: {{ resume.title }}</small>
             </div>
             <div class="card-body">
-                <form method="post">
+                <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     
                     <!-- Повне ім'я -->
@@ -74,6 +74,25 @@
                             <div class="text-danger small">{{ form.summary.errors }}</div>
                         {% endif %}
                         <div class="form-text">Розкажіть коротко про себе, ваші цілі та досягнення (3-5 речень)</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Фотографія</label>
+                        {{ form.photo }}
+                        {% if form.photo.errors %}
+                            <div class="text-danger small">{{ form.photo.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">
+                            Завантажте ваше професійне фото (рекомендовано: 200x200px)
+                        </div>
+                        
+                        {% if personal_info and personal_info.photo %}
+                        <div class="mt-2">
+                            <strong>Поточне фото:</strong><br>
+                            <img src="{{ personal_info.photo.url }}" alt="Current photo" 
+                                 class="img-thumbnail mt-2" style="max-width: 150px;">
+                        </div>
+                        {% endif %}
                     </div>
 
                     <!-- Кнопки -->

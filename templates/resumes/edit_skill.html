@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Редагування навички - Resume Builder{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-warning text-dark">
+                <h2 class="mb-0">✏️ Редагування навички</h2>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Назва навички *</label>
+                        {{ form.name }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Рівень *</label>
+                        {{ form.level }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Категорія</label>
+                        {{ form.category }}
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'dashboard' %}" class="btn btn-secondary me-md-2">↩️ Скасувати</a>
+                        <button type="submit" class="btn btn-warning">💾 Оновити навичку</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

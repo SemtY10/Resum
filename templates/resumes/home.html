@@ -59,6 +59,32 @@
                 <li class="list-group-item">Перегляньте та збережіть результат!</li>
             </ol>
         </div>
+        <div class="row mt-5">
+            <div class="col-12">
+                <h3>📢 Останні новини</h3>
+                <div class="row">
+                    {% if latest_news %}
+                        {% for news in latest_news %}
+                        <div class="col-md-6 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6>{{ news.title }}</h6>
+                                    <p class="small">{{ news.content|truncatewords:20 }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="col-12">
+                            <p class="text-muted">Немає новин</p>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="text-center mt-3">
+                    <a href="{% url 'news_list' %}" class="btn btn-outline-primary">Всі новини</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

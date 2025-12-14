@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Новини - Resume Builder{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-5 fw-bold">📰 Новини</h1>
+            <p class="lead">Останні оновлення та оголошення</p>
+        </div>
+    </div>
+
+    {% if news %}
+    <div class="row">
+        {% for item in news %}
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">{{ item.title }}</h5>
+                </div>
+                <div class="card-body">
+                    <p>{{ item.content }}</p>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">
+                        {{ item.created_at|date:"d.m.Y H:i" }}
+                    </small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <h4>Новини відсутні</h4>
+        <p>Слідкуйте за оновленнями!</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

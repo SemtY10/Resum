@@ -22,7 +22,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('resumes.urls')),
-    path('users/', include('users.urls')),  # ← ДОДАЄМО ЦЕ
+    path('users/', include('users.urls')),
+    path('news/', include('news.urls')),
 ]
 
 if settings.DEBUG:

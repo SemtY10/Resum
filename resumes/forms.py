@@ -37,7 +37,7 @@ class ResumeFormWithTemplate(forms.ModelForm):
 class PersonalInfoForm(forms.ModelForm):
     class Meta:
         model = PersonalInfo
-        fields = ['full_name', 'job_title', 'email', 'phone', 'address', 'summary']
+        fields = ['full_name', 'job_title', 'email', 'phone', 'address', 'summary', 'photo']
         widgets = {
             'full_name': forms.TextInput(attrs={'class': 'form-control'}),
             'job_title': forms.TextInput(attrs={'class': 'form-control'}),
@@ -45,6 +45,7 @@ class PersonalInfoForm(forms.ModelForm):
             'phone': forms.TextInput(attrs={'class': 'form-control'}),
             'address': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'summary': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'photo': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
         labels = {
             'full_name': "Повне ім'я",
